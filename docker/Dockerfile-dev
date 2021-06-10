@@ -1,0 +1,7 @@
+FROM stactools-pointcloud:latest
+
+RUN conda install -c conda-forge pandoc
+
+COPY . /src/stactools-pointcloud
+RUN pip install -r /src/stactools-pointcloud/requirements-dev.txt
+WORKDIR /src/stactools-pointcloud

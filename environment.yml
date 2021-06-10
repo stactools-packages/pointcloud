@@ -1,0 +1,7 @@
+name: stactools-pointcloud
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - gdal
+  - pdal

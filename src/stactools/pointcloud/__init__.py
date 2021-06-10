@@ -12,3 +12,6 @@ def register_plugin(registry):
     from stactools.pointcloud import commands
 
     registry.register_subcommand(commands.create_pointcloud_command)
+
+
+__version__ = '0.1.5'
