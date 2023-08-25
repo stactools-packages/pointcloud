@@ -5,7 +5,8 @@ import os.path
 from pdal import Pipeline
 from pyproj import CRS
 from pystac import Item, Asset
-from pystac.extensions.pointcloud import Statistic as PointcloudStatistic, Schema as PointcloudSchema
+from pystac.extensions.pointcloud import Statistic as PointcloudStatistic, Schema as PointcloudSchema, PointcloudExtension
+from pystac.extensions.projection import ProjectionExtension
 from shapely.geometry import shape, box, mapping
 
 from stactools.core.projection import reproject_geom
@@ -85,11 +86,11 @@ def create_item(href,
               roles=["data"],
               title="{} point cloud".format(encoding)))
 
-    item.ext.enable("pointcloud")
-    item.ext.pointcloud.count = metadata["count"]
-    item.ext.pointcloud.type = pointcloud_type
-    item.ext.pointcloud.encoding = encoding
-    item.ext.pointcloud.schemas = [
+    pointcloud_ext = PointcloudExtension.ext(item, add_if_missing=True)
+    pointcloud_ext.count = metadata["count"]
+    pointcloud_ext.type = pointcloud_type
+    pointcloud_ext.encoding = encoding
+    pointcloud_ext.schemas = [
         PointcloudSchema(schema) for schema in schema
     ]
     # TODO compute density.
@@ -100,14 +101,14 @@ def create_item(href,
     # quick-and-dirty? But then densities mean different things depending on
     # the processing history of the STAC file, which seems inconsistant.
     if compute_statistics:
-        item.ext.pointcloud.statistics = _compute_statistics(reader)
+        pointcloud_ext.statistics = _compute_statistics(reader)
 
     epsg = spatialreference.to_epsg()
     if epsg:
-        item.ext.enable("projection")
-        item.ext.projection.epsg = epsg
-        item.ext.projection.wkt2 = spatialreference.to_wkt()
-        item.ext.projection.bbox = list(original_bbox.bounds)
+        projection_ext = ProjectionExtension.ext(item, add_if_missing=True)
+        projection_ext.epsg = epsg
+        projection_ext.wkt2 = spatialreference.to_wkt()
+        projection_ext.bbox = list(original_bbox.bounds)
 
     return item
 
