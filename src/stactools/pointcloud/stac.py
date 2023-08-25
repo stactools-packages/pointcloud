@@ -5,7 +5,7 @@ import os.path
 from pdal import Pipeline
 from pyproj import CRS
 from pystac import Item, Asset
-from pystac.extensions.pointcloud import Statistic as PointcloudStatistic, Schema as PointcloudSchema, PointcloudExtension
+from pystac.extensions.pointcloud import Statistic, Schema, PointcloudExtension
 from pystac.extensions.projection import ProjectionExtension
 from shapely.geometry import shape, box, mapping
 
@@ -90,9 +90,7 @@ def create_item(href,
     pointcloud_ext.count = metadata["count"]
     pointcloud_ext.type = pointcloud_type
     pointcloud_ext.encoding = encoding
-    pointcloud_ext.schemas = [
-        PointcloudSchema(schema) for schema in schema
-    ]
+    pointcloud_ext.schemas = [Schema(schema) for schema in schema]
     # TODO compute density.
     #
     # Do we just divide point clount by bounding box area? That's too low. But
@@ -117,5 +115,5 @@ def _compute_statistics(reader):
     pipeline = Pipeline(json.dumps([reader, {"type": "filters.stats"}]))
     pipeline.execute()
     stats = pipeline.metadata["metadata"]["filters.stats"]["statistic"]
-    stats = [PointcloudStatistic(stats) for stats in stats]
+    stats = [Statistic(stats) for stats in stats]
     return stats

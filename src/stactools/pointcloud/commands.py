@@ -14,6 +14,7 @@ def create_pointcloud_command(cli):
     """Creates a command group for commands working with
     pointclouds.
     """
+
     @cli.group('pointcloud',
                short_help=("Commands for working with "
                            "pointclouds."))

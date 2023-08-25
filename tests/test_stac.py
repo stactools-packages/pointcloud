@@ -6,6 +6,7 @@ from stactools.pointcloud.stac import create_item
 
 
 class StacTest(unittest.TestCase):
+
     def test_create_item(self):
         path = TestData.get_path("data-files/pointcloud/autzen_trim.las")
         item = create_item(path)
