@@ -35,7 +35,7 @@ def create_item(href,
     else:
         reader = href
     # This is the best way I can find right now to get header information
-    # from PDAL-python without reading the whole ˚file.
+    # from PDAL-python without reading the whole file.
     pipeline = Pipeline(
         json.dumps([reader, {
             "type": "filters.head",
