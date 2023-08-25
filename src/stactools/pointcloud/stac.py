@@ -34,14 +34,14 @@ def create_item(href,
     else:
         reader = href
     # This is the best way I can find right now to get header information
-    # from PDAL-python without reading the whole file.
+    # from PDAL-python without reading the whole ˚file.
     pipeline = Pipeline(
         json.dumps([reader, {
             "type": "filters.head",
             "count": 0
         }]))
     pipeline.execute()
-    metadata = json.loads(pipeline.get_metadata())["metadata"]
+    metadata = json.loads(pipeline.metadata)["metadata"]
     try:
         reader_key = next(key for key in metadata.keys()
                           if key.startswith("readers"))
@@ -53,7 +53,7 @@ def create_item(href,
     except StopIteration:
         raise Exception("could not find reader key in pipeline metadata")
     metadata = metadata[reader_key]
-    schema = pipeline.get_schema()["schema"]["dimensions"]
+    schema = pipeline.schema["schema"]["dimensions"]
 
     id = os.path.splitext(os.path.basename(href))[0]
     encoding = os.path.splitext(href)[1][1:]
@@ -116,6 +116,6 @@ def _compute_statistics(reader):
     pipeline = Pipeline(json.dumps([reader, {"type": "filters.stats"}]))
     pipeline.execute()
     stats = json.loads(
-        pipeline.get_metadata())["metadata"]["filters.stats"]["statistic"]
+        pipeline.metadata)["metadata"]["filters.stats"]["statistic"]
     stats = [PointcloudStatistic(stats) for stats in stats]
     return stats
