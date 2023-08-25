@@ -5,7 +5,7 @@ import os.path
 from pdal import Pipeline
 from pyproj import CRS
 from pystac import Item, Asset
-from pystac.extensions.pointcloud import PointcloudStatistic, PointcloudSchema
+from pystac.extensions.pointcloud import Statistic as PointcloudStatistic, Schema as PointcloudSchema
 from shapely.geometry import shape, box, mapping
 
 from stactools.core.projection import reproject_geom
