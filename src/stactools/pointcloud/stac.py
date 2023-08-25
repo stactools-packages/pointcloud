@@ -41,7 +41,7 @@ def create_item(href,
             "count": 0
         }]))
     pipeline.execute()
-    metadata = json.loads(pipeline.metadata)["metadata"]
+    metadata = pipeline.metadata["metadata"]
     try:
         reader_key = next(key for key in metadata.keys()
                           if key.startswith("readers"))
@@ -115,7 +115,6 @@ def create_item(href,
 def _compute_statistics(reader):
     pipeline = Pipeline(json.dumps([reader, {"type": "filters.stats"}]))
     pipeline.execute()
-    stats = json.loads(
-        pipeline.metadata)["metadata"]["filters.stats"]["statistic"]
+    stats = pipeline.metadata["metadata"]["filters.stats"]["statistic"]
     stats = [PointcloudStatistic(stats) for stats in stats]
     return stats
