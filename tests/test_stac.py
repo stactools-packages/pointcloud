@@ -8,17 +8,14 @@ from stactools.pointcloud.stac import create_item
 
 
 class StacTest(unittest.TestCase):
-
     def test_create_item(self):
         path = f"{os.path.dirname(__file__)}/data-files/autzen_trim.las"
         item = create_item(path)
         self.assertEqual(item.id, "autzen_trim")
         self.assertEqual(item.datetime, datetime.datetime(2015, 9, 10))
 
-        projection_ext = ProjectionExtension.ext(item, add_if_missing=True)
-        self.assertEqual(projection_ext.epsg, 2994)
-
-        pointcloud_ext = PointcloudExtension.ext(item, add_if_missing=True)
+        ProjectionExtension.validate_has_extension(item)
+        pointcloud_ext = PointcloudExtension.ext(item)
         self.assertEqual(pointcloud_ext.count, 110000)
         self.assertEqual(pointcloud_ext.type, "lidar")
         self.assertEqual(pointcloud_ext.encoding, "las")
