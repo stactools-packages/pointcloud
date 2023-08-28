@@ -1,15 +1,42 @@
 # stactools-pointcloud
 
-Template repostitory for [stactools](https://github.com/stac-utils/stactools) packages.
+Creates a STAC Item based on the header of a pointcloud.
 
-## How to use
+## Dependencies
 
-1. Clone this repository and name it `stactools-{NAME}`, where `NAME` is your package name.
-   This name should be short, memorable, and a valid Python package name (i.e. it shouldn't start with a number, etc).
-2. Update `setup.cfg` with your package name, description, and such.
-3. Rename `src/stactools.pointcloud` to `src/stactools/{NAME}`.
-4. Rewrite this README to provide information about how to use your package.
-5. Update the LICENSE with your company's information (or whomever holds the copyright).
-6. Update the environment name in `environment.yml`.
-7. Update the environment variables in `.github/workflows/release.yml` to the appropriate values to publish for your organization.
-8. Update all scripts in the `docker` directory to refer to `stactools-{NAME}` and `stactools-{NAME}-dev`.
+PDAL
+
+## Installation
+```bash
+pip install stactools-pointcloud
+```
+
+## Usage
+
+```
+stac pointcloud create-item [OPTIONS] HREF DST
+
+
+HREF is the pointcloud file. DST is directory that a STAC Item JSON file
+will be created in.
+
+Options:
+  -r, --reader TEXT               Override the default PDAL reader.
+  -t, --pointcloud-type TEXT      Set the pointcloud type (default: lidar)
+  --compute-statistics / --no-compute-statistics
+                                  Compute statistics for the pointcloud (could
+                                  take a while)
+  -p, --providers TEXT            Path to JSON file containing array of
+                                  additional providers
+  --help                          Show this message and exit.
+stactools package for Pointcloud data.
+
+```
+
+## Example
+
+LAZ archive:
+
+```bash
+stac pointcloud create-item https://maps1.vcgov.org/LIDAR/LAZ/USGS_LPC_FL_Peninsular_2018_D18_LID2019_241594_E.laz .
+```
