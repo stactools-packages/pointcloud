@@ -11,13 +11,12 @@ from shapely.geometry import box, mapping
 from stactools.core.projection import reproject_shape
 
 
-def create_item(
-    href,
-    pdal_reader=None,
-    compute_statistics=False,
-    pointcloud_type="lidar",
-    additional_providers=None,
-):
+def create_item(href,
+                pdal_reader=None,
+                compute_statistics=False,
+                pointcloud_type="lidar",
+                additional_providers=None,
+                a_srs="EPSG:4326"):
     """Creates a STAC Item from a point cloud.
 
     Args:
@@ -27,6 +26,8 @@ def create_item(
         point cloud. Could take a while.
         pointcloud_type (str): The point cloud type, e.g. "lidar", "eopc",
         "radar", "sonar", or "other". Default is "lidar".
+        a_srs (str): Proj string to reproject native CRS to. This proj string
+            must define a lat/lon projection.
 
     Return:
         pystac.Item: A STAC Item representing this point cloud.
@@ -63,7 +64,7 @@ def create_item(
     original_bbox = box(metadata["minx"], metadata["miny"], metadata["maxx"],
                         metadata["maxy"])
     geometry = reproject_shape(spatialreference,
-                               "EPSG:4326",
+                               a_srs,
                                original_bbox,
                                precision=6)
     bbox = geometry.bounds

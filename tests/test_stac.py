@@ -35,3 +35,17 @@ class StacTest(unittest.TestCase):
         url = "https://github.com/PDAL/PDAL/raw/2.2.0/test/data/las/autzen_trim.las"
         item = create_item(url)
         item.validate()
+
+    def test_create_item_with_custom_crs(self):
+        path = f"{os.path.dirname(__file__)}/data-files/moon.las"
+        item = create_item(path, a_srs="IAU_2015:30100")
+        self.assertEqual(item.id, "moon")
+        ProjectionExtension.validate_has_extension(item)
+        pointcloud_ext = PointcloudExtension.ext(item)
+        # Check that the lunar radius is in the proj string.
+        self.assertIn('1737400', item.properties['proj:wkt2'])
+        self.assertEqual(pointcloud_ext.count, 5538)
+        self.assertEqual(pointcloud_ext.type, "lidar")
+        self.assertEqual(pointcloud_ext.encoding, "las")
+        self.assertEqual(pointcloud_ext.statistics, None)
+        self.assertTrue(pointcloud_ext.schemas)

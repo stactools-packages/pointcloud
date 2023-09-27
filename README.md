@@ -29,6 +29,9 @@ Options:
   -p, --providers TEXT            Path to JSON file containing array of
                                   additional providers
   --help                          Show this message and exit.
+  -a, --a_srs TEXT                Proj short string for the lat/lon projection used
+                                  to compute the bbox / geometry for STAC.
+                                      
 stactools package for Pointcloud data.
 
 ```
