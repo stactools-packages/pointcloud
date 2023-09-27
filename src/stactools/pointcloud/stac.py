@@ -7,8 +7,8 @@ from pyproj import CRS
 from pystac import Asset, Item
 from pystac.extensions.pointcloud import PointcloudExtension, Schema, Statistic
 from pystac.extensions.projection import ProjectionExtension
-from shapely.geometry import box, mapping, shape
-from stactools.core.projection import reproject_geom
+from shapely.geometry import box, mapping
+from stactools.core.projection import reproject_shape
 
 
 def create_item(
@@ -62,17 +62,17 @@ def create_item(
     spatialreference = CRS.from_string(metadata["spatialreference"])
     original_bbox = box(metadata["minx"], metadata["miny"], metadata["maxx"],
                         metadata["maxy"])
-    geometry = reproject_geom(spatialreference,
-                              "EPSG:4326",
-                              mapping(original_bbox),
-                              precision=6)
-    bbox = list(shape(geometry).bounds)
+    geometry = reproject_shape(spatialreference,
+                               "EPSG:4326",
+                               original_bbox,
+                               precision=6)
+    bbox = geometry.bounds
     dt = datetime.datetime(
         metadata["creation_year"], 1,
         1) + datetime.timedelta(metadata["creation_doy"] - 1)
 
     item = Item(id=id,
-                geometry=geometry,
+                geometry=mapping(geometry),
                 bbox=bbox,
                 datetime=dt,
                 properties={})
