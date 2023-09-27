@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `a_srs` to specify the output SRS ([#8](https://github.com/stactools-packages/pointcloud/pull/8))
+
 ### Fixed
 
 - Use `reproject_shape` instead of `reproject_geom` ([#9](https://github.com/stactools-packages/pointcloud/pull/9))
